@@ -10,6 +10,9 @@ const closeAdjustments = document.querySelectorAll(".close-adjustment");
 const sliderContainers = document.querySelectorAll(".sliders");
 let initialColours;
 
+// This is for local storage
+let savedPalettes = [];
+
 // Event Listeners
 generateBtn.addEventListener("click", randomColours);
 
@@ -224,6 +227,60 @@ function lockLayer(e, index) {
 	} else {
 		e.target.innerHTML = '<i class="fas fa-lock-open"></i>';
 	}
+}
+
+// Implement save to palette and local storage stuff
+const saveBtn = document.querySelector(".save");
+const submitSave = document.querySelector(".submit-save");
+const closeSave = document.querySelector(".close-save");
+const saveContainer = document.querySelector(".save-container");
+const saveInput = document.querySelector(".save-container input");
+
+// Event listeners
+
+saveBtn.addEventListener("click", openPalette);
+closeSave.addEventListener("click", closePalette);
+submitSave.addEventListener("click", savePalette);
+
+function openPalette(e) {
+	const popup = saveContainer.children[0];
+	saveContainer.classList.add("active");
+	popup.classList.add("active");
+}
+
+function closePalette(e) {
+	const popup = saveContainer.children[0];
+	saveContainer.classList.remove("active");
+	popup.classList.remove("active");
+}
+
+function savePalette(e) {
+	saveContainer.classList.remove("active");
+	popup.classList.remove("active");
+	const name = saveInput.value;
+	const colours = [];
+	currentHexes.forEach((hex) => {
+		colours.push(hex.innerText);
+	});
+	// Generate Object
+	let paletteNr = savedPalettes.length;
+	const paletteObj = { name, colours, nr: paletteNr };
+	savedPalettes.push(paletteObj);
+	// Save to local storage
+	saveToLocal(paletteObj);
+	saveInput.value = "";
+}
+
+function saveToLocal(paletteObj) {
+	let localPalettes;
+	if (localStorage.getItem("palettes") === null) {
+		localPalettes = [];
+	} else {
+		localPalettes = JSON.parse(localStorage.getItem("palettes"));
+	}
+
+	localPalettes.push(paletteObj);
+	localStorage.setItem("palettes", JSON.stringify(localPalettes));
 }
 
 randomColours();
