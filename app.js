@@ -12,6 +12,7 @@ let initialColours;
 
 // Event Listeners
 generateBtn.addEventListener("click", randomColours);
+
 sliders.forEach((slider) => {
 	slider.addEventListener("input", hslControls);
 });
@@ -46,6 +47,12 @@ closeAdjustments.forEach((button, index) => {
 	});
 });
 
+lockBtn.forEach((button, index) => {
+	button.addEventListener("click", (e) => {
+		lockLayer(e, index);
+	});
+});
+
 //Functions
 
 // Colour Generator
@@ -59,14 +66,20 @@ function randomColours() {
 	colourDivs.forEach((div, index) => {
 		const hexText = div.children[0];
 		const randomColour = generateHex();
-
 		// Add to initialColours
-		initialColours.push(chroma(randomColour).hex());
+
+		if (div.classList.contains("locked")) {
+			initialColours.push(hexText.innerText);
+			return;
+		} else {
+			initialColours.push(chroma(randomColour).hex());
+		}
 
 		// Add the colour to the background
 		div.style.backgroundColor = randomColour;
 		hexText.innerText = randomColour;
-		// Check for cocntrast
+
+		// Check for contrast
 		checkTextContrast(randomColour, hexText);
 		// Initial Colourize Sliders
 		const colour = chroma(randomColour);
@@ -199,6 +212,18 @@ function openAdjustmentPanel(index) {
 
 function closeAdjustmentPanel(index) {
 	sliderContainers[index].classList.remove("active");
+}
+
+function lockLayer(e, index) {
+	const lockSVG = e.target.children[0];
+	const activeBg = colourDivs[index];
+	activeBg.classList.toggle("locked");
+
+	if (lockSVG.classList.contains("fa-lock-open")) {
+		e.target.innerHTML = '<i class="fas fa-lock"></i>';
+	} else {
+		e.target.innerHTML = '<i class="fas fa-lock-open"></i>';
+	}
 }
 
 randomColours();
