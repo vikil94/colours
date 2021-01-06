@@ -49,11 +49,11 @@ svg {
 	background: rgb(255, 255, 255);
 	padding: 1rem;
 	width: 80%;
-	/* pointer-events: none; */
+	pointer-events: none;
 	border-top-left-radius: 1rem;
 	/* We are adding an adjustment class  */
-	/* opacity: 0; */
-	/* transform: translateY(100px); */
+	opacity: 0;
+	transform: translateY(100px);
 	transition: all 0.5s ease-in-out;
 }
 
@@ -140,6 +140,7 @@ input[type="range"] {
 	height: 100%;
 	display: flex;
 	justify-content: center;
+	transition: all 0.5s ease-in-out;
 	align-items: center;
 	opacity: 0;
 	pointer-events: none;
